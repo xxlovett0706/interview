@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body></body>
+    <script>
+        // 初始化 patch(container, vnode)
+        function createElementByVnode(vnode) {
+            let tag = vnode.tag;
+            let attrs = vnode.attrs || {};
+            let children = vnode.children || [];
+
+            if (!tag) {
+                return null;
+            }
+
+            let ele = document.createElement(tag);
+            for (let attr in attrs) {
+                if (attrs.hasOwnProperty(attr)) {
+                    ele.setAttribute(attr, attrs[attr]);
+                }
+            }
+            children.forEach((child) => {
+                ele.addpendChild(createElementByVnode(child));
+            });
+
+            return ele;
+        }
+        
+    </script>
+</html>

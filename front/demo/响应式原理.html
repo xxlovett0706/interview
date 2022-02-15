@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <div id="app"><span class="box1"></span><span class="box2"></span></div>
+    </body>
+    <script>
+        let dep = {
+            clientList: {},
+            listen: function (key, fn) {
+                (this.clientList[key] || (this.clientList[key] = [])).push(fn);
+            },
+            trigger: function () {
+                let key = Array.prototype.shift.call(arguments);
+                let fns = this.clientList[key];
+
+                if (!fns || fns.length === 0) {
+                    return false;
+                }
+
+                for (let i = 0, fn; (fn = fns[i++]); ) {
+                    fn.apply(this, arguments);
+                }
+            },
+        };
+
+        let myProxy = function ({ data, tag, dataKey, selector }) {
+            let value = "";
+            let el = document.querySelector(selector);
+            Object.defineProperty(data, dataKey, {
+                get: function () {
+                    return value;
+                },
+                set: function (newVal) {
+                    value = newVal;
+                    dep.trigger(tag, newVal);
+                },
+            });
+
+            dep.listen(tag, (text) => {
+                el.innerHTML = text;
+            });
+        };
+
+        let obj = {};
+        myProxy({
+            data: obj,
+            tag: "view1",
+            dataKey: "one",
+            selector: ".box1",
+        });
+        myProxy({
+            data: obj,
+            tag: "view2",
+            dataKey: "two",
+            selector: ".box2",
+        });
+
+        // 初始化 赋值是一次
+        obj.one = "test";
+        obj.two = "hello world";
+
+        // 更新是 N 次
+    </script>
+</html>
