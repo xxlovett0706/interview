@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 组合继承
+      // 核心在 Parent.call(this, value) 继承父类属性
+      // 缺点是继承父类方法时，调用了父类的构造方法，导致不必要的内存空间浪费
+      function Parent(value) {
+        this.value = value;
+      }
+      Parent.prototype.getValue = function () {
+        console.log(this.value);
+      };
+
+      function Child(value) {
+        Parent.call(this, value);
+      }
+      Child.prototype = new Parent();
+
+      const child = new Child(1);
+      console.log(child instanceof Parent);
+    </script>
+    <script>
+      // 寄生组合继承
+      function Parent(value) {
+        this.value = value;
+      }
+      Parent.prototype.getValue = function () {
+        console.log(this.value);
+      };
+
+      function Child (value) {
+        
+      }
+    </script>
+  </body>
+</html>
